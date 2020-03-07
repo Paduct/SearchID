@@ -1,0 +1,132 @@
+<NLabel@Label>:
+    halign: 'center'
+    valign: 'center'
+    size_hint_y: 1
+    size_hint_x: None
+    bold: True
+    markup: True
+    shorten: False
+    shorten_from: 'center'
+
+
+<ETextInput@TextInput>:
+    height: 30
+    line_height: 18
+    size_hint_x: 1
+    size_hint_y: 1
+    multiline: False
+    text: ''
+
+
+<FButton@Button>:
+    height: 50
+    size_hint_x: 1
+    size_hint_y: None
+
+
+<MenuBar@ActionGroup>:
+    ActionButton:
+        text: 'Save'
+        on_press: Factory.PathChooser().open()
+
+
+<RootWindow@BoxLayout>:
+    size_hint_x: 1
+    minimum_width: 30
+    size_hint_y: 1
+    spacing: 10
+    padding: 10
+    orientation: 'vertical'
+
+    PanelBar
+
+    GridLayout:
+        height: 170
+        col_default_width: 0
+        col_force_default: False
+        size_hint_x: 1
+        size_hint_min_y: None
+        row_default_height: 30
+        row_force_default: True
+        size_hint_y: None
+        cols: 2
+        spacing: 5
+
+        NLabel:
+            text: app.searcher.CATALOG_STR.capitalize()
+
+        ETextInput:
+            id: catalog
+            hint_text: 'Directory path'
+
+        NLabel:
+            text: app.searcher.LOG_STR.capitalize()
+
+        ETextInput:
+            id: log
+            hint_text: 'Mask allowed'
+
+        NLabel:
+            text: app.searcher.IDENT_STR.capitalize()
+
+        ETextInput:
+            id: ident
+            hint_text: 'Only numbers'
+
+        Switch:
+            on_active: app.colored()
+            id: colors
+            size_hint_x: None
+            active: False
+
+        Slider:
+            on_value: app.show_interval()
+            step: 1
+            value_track: True
+            value: app.searcher.DEFAULT_INTERVAL
+            id: inter
+
+        NLabel:
+            id: s_color
+            text: app.RED_NOT_COLORED_STR
+
+        NLabel:
+            id: s_inter
+            size_hint_x: 1
+            color: (0, 0, 1, 1)
+            text: app.INTERVAL_STR.format(app.searcher.DEFAULT_INTERVAL)
+
+    FButton:
+        on_press: app.find()
+        text: 'Find'
+
+    ScrollView:
+        id: scroll
+
+        CodeInput:
+            id: view
+            readonly: True
+            use_bubble: True
+            use_handles: True
+            size_hint: (None, None)
+            width: max(self.width, scroll.width)
+            height: max(self.minimum_height, scroll.height)
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: 50
+
+        FButton:
+            on_press: app.change_result(False)
+            text: 'Previous'
+
+        NLabel:
+            size_hint_x: 1
+            color: (1, 1, 0, 1)
+            text: app.RESULT_STR.format(0, 0)
+            id: s_result
+
+        FButton:
+            on_press: app.change_result(True)
+            text: 'Following'
